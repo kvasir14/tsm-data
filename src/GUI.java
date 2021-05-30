@@ -1,21 +1,30 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import javax.swing.*;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 public class GUI extends JPanel implements ActionListener {
-	/**
-	 * 
-	 */
+	//#region properties
 	private static final long serialVersionUID = -5970893809825175093L;
 	static JFrame frame = new JFrame("Filters");
 	GridLayout grid = new GridLayout(1,7);
@@ -25,7 +34,9 @@ public class GUI extends JPanel implements ActionListener {
 	static JDatePickerImpl startDatePicker;
 	static JDatePickerImpl endDatePicker;
 	public static Subset s = new Subset(new ArrayList<Item>());
-	
+	//#endregion
+
+	//#region constructors
 	public GUI() {
 		super ();
 		//System.out.println("*"+Graph.account.getArray()+"\n\n");
@@ -51,8 +62,7 @@ public class GUI extends JPanel implements ActionListener {
 		add(updateBtn);
 		updateBtn.addActionListener(this);
 		panel.add(updateBtn,BorderLayout.NORTH);
-		
-		
+
 		//add(clearBtn);
 		clearBtn.addActionListener(this);
 	   // panel.add(clearBtn,BorderLayout.SOUTH);
@@ -65,11 +75,14 @@ public class GUI extends JPanel implements ActionListener {
 		//frame.setLocationRelativeTo(null);
 		//frame.setSize(new java.awt.Dimension( 1000 , 1000 ));
 		frame.setVisible(true);
-		
-
-
 	}
-	
+	//#endregion
+
+	//#region methods
+	/** 
+	 * @param str
+	 * @return JPanel
+	 */
 	public static JPanel getNewDatePanel(String str){
 		Date date = new Date();
 		UtilDateModel model = new UtilDateModel();
@@ -107,8 +120,11 @@ public class GUI extends JPanel implements ActionListener {
 		start_date_panel.add(datePicker,BorderLayout.SOUTH);
 		return start_date_panel;
 	}
-	
 
+	/** 
+	 * @param value
+	 * @return DynamicList
+	 */
 	public DynamicList createDynamicList(Filter_value value) {
 		//value.setArray(Data_processing.getPossibleValues(s, value));
 		DynamicList dropdown = new DynamicList(value);
@@ -137,13 +153,19 @@ public class GUI extends JPanel implements ActionListener {
 		return dropdown;
 	}
 
-
+	/** 
+	 * @param subset
+	 */
 	@SuppressWarnings("unused")
 	static void createAndShowGUI(Subset subset) {
 		s =subset;
 		JComponent newContentPane = new GUI();
 	}
-	
+
+	/** 
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static void filterModelBasedOnOthers() throws ParseException, IOException {
 		//System.out.println("filterModelBasedOnOthers");
 		//s = Data_processing.updateGraphbyFilters(s);
@@ -205,8 +227,6 @@ public class GUI extends JPanel implements ActionListener {
 				modelCopy2.add(element.toString());
 				//}
 			}
-			
-
 
 			DefaultListModel<String> model2 = new DefaultListModel<>();
 			for (String s : modelCopy2) {
@@ -236,7 +256,9 @@ public class GUI extends JPanel implements ActionListener {
 		}
 	}
 
-
+	/** 
+	 * @param event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource().equals(clearBtn)) {
@@ -246,4 +268,5 @@ public class GUI extends JPanel implements ActionListener {
 			}
 		}
 	}
+	//#endregion
 }

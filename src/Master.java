@@ -25,11 +25,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Master {
+	//#region properties
 	static List<Event> allEvents = new ArrayList<Event>();
 	static List<String> eventsPerDay = new ArrayList<String>();
 	static List<Item> allItems = new ArrayList<Item>();
@@ -50,7 +52,6 @@ public class Master {
 	static String apikey; //blizzard API key
 	static List<String> Enchantingitems = new ArrayList<String>();
 
-	
 	static String api_token;
 	static boolean Read_From_TSM_Files = true;
 	static long Min_Date = 0;
@@ -61,26 +62,43 @@ public class Master {
 	static boolean Use_Events_Auction_Save_File = true;
 	static boolean Use_Events_Trade_Save_File = true;
 	static boolean Use_Events_COD_Save_File = true;
-	
-	
+	//#endregion
+
+	//#region constructors
 	public Master() throws IOException, ParseException, URISyntaxException {
 		getSettings();
 		one();
 	}
-	
+
+	//#endregion
+
+	//#region methods
+	/** 
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 * @throws ParseException
+	 */
 	public static void one() throws IOException, URISyntaxException, ParseException {
 		//callback to two()
 		api.getapikey(); 
 		
 	}
-	
+
+	/** 
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static void two() throws IOException, ParseException {
 		//callback to three
 		FileChooser.checkForSavedDirectories();
 		
 		//three();
 	}
-	
+
+	/** 
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static void three() throws IOException, ParseException {
 		//System.out.println(Master.directories);
 		//arbitrage();
@@ -88,13 +106,16 @@ public class Master {
 		init();
 	}
 
+	/** 
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static void init() throws IOException, ParseException {
 		System.out.println("init");
 		
 		//getUsefulDirectories();
 		//getFullDirectories();
-		
-		
+
 		getSavedEvents(Min_Date);
 		
 		if(Read_From_TSM_Files) {
@@ -129,8 +150,7 @@ public class Master {
 		writeSavedEvents(new Subset());	
 		
 		//SoHprofit(s);
-		
-		
+
 		//flipProfit(s);
 		//s=s.date(mdy.parse("11/7/19").getTime(),mdy.parse(mdy.format(new Date())).getTime()+1000*60*60*24);
 		s=s.date(mdy.parse("1/30/20").getTime(),mdy.parse(mdy.format(new Date())).getTime()+1000*60*60*24);
@@ -154,14 +174,12 @@ public class Master {
 		Subset herbs = new Subset(Filter.combine(s.nameExact("Akunda's Bite"), Filter.combine(s.nameExact("Riverbud"), Filter.combine(s.nameExact("Sea Stalk"), Filter.combine(s.nameExact("Siren's Pollen"), Filter.combine(s.nameExact("Star Moss"), s.nameExact("Winter's Kiss")))))).items);
 		a = Filter.combine(a, herbs);*/
 
-		
 		//a = Filter.combine(a.loc("Auction"), Filter.combine(a.loc("COD"), a.loc("Trade")));
 		
 		writeSavedEvents("Accounting-Events.txt", s);	
 		//comment out the line below to disable the graph
 		Graph_wrapper.init(interval, s);
-		
-		
+
 		//enchantProfit(s);
 		
 	  //  for(DynamicList list : GUI.lists) {
@@ -172,7 +190,10 @@ public class Master {
 		
 		System.out.println("Total Auction profit: "+String.format("%.2f", Data_processing.sum(s.loc("Auction").items,"goldearned")));
 	}
-	
+
+	/** 
+	 * @throws FileNotFoundException
+	 */
 	private static void getUsefulDirectories() throws FileNotFoundException {
 		Scanner scan = new Scanner(new File("which-files.txt"));
 		for(int i=0;scan.hasNext();i++) {
@@ -183,6 +204,11 @@ public class Master {
 		
 	}
 
+	 /** 
+	  * @param s
+	  * @throws ParseException
+	  * @throws IOException
+	  */
 	 //not for public use. This is how I calculate my expenses/profit for whatever I'm currently doing professions wise.
 	private static void accounting(Subset s) throws ParseException, IOException {
 		
@@ -201,8 +227,6 @@ public class Master {
 		double cost_total = 0;
 		double sales_total = 0;
 		double buy_total = 0;
-		
-		
 
 		Enchantingitems =
 				new ArrayList<String>(Arrays.asList(
@@ -288,8 +312,7 @@ public class Master {
 				//}
 					
 			}
-			
-			
+
 		}
 		//printfooter(cost, sales, buy);
 		System.out.println();
@@ -318,7 +341,12 @@ public class Master {
 				String.format(two, "ROI")
 				);
 	}
-	
+
+	/** 
+	 * @param cost
+	 * @param sales
+	 * @param buy
+	 */
 	//not for public use
 	static void printfooter(double cost, double sales, double buy) {
 		String one = "%-40s";
@@ -358,6 +386,10 @@ public class Master {
 				);*/
 	}
 
+	/** 
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	//not for public use
 	public static void arbitrage() throws JSONException, IOException {
 		PrintWriter out = new PrintWriter(new File("ah-data.txt"));
@@ -384,6 +416,10 @@ public class Master {
 		
 	}
 
+	/** 
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public static void getAuctionData() throws JSONException, IOException {
 		PrintWriter out = new PrintWriter(new File("ah-data.txt"));
 		if(Master.api_token == null || Master.api_token.isEmpty() || Master.api_token.length()==0) {
@@ -401,6 +437,12 @@ public class Master {
 		System.exit(0);
 	}
 
+	/** 
+	 * @param realm_id
+	 * @return String
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	//not for public use. But useful if you want to download all of the current JSON files from the wow api
 	public static String getAHdata(String realm_id) throws JSONException, IOException{
 		org.json.JSONObject json = api.readJsonFromUrl("https://us.api.blizzard.com/data/wow/connected-realm/"+realm_id+"/auctions?namespace=dynamic-us&locale=en_US&access_token="+Master.api_token);
@@ -417,7 +459,11 @@ public class Master {
 		System.out.println();
 		return "";
 	}
-	
+
+	/** 
+	 * @param urlStr
+	 * @param dstFile
+	 */
 	//not for public use
 	private static void donwloadFile(String urlStr, File dstFile) {
 		if (!dstFile.exists()) {
@@ -433,12 +479,13 @@ public class Master {
 		
 	}
 
-	
+	/** 
+	 * @param rd
+	 * @return String
+	 * @throws IOException
+	 */
 	//////////////////////////////////////////////////////////
-	
-	
-	
-	
+
 	private static String readAll(Reader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		int cp;
@@ -448,6 +495,12 @@ public class Master {
 		return sb.toString();
 	}
 
+	/** 
+	 * @param url
+	 * @return JSONObject
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
 		url="https://graph.facebook.com/19292868552";
 		InputStream is = new URL(url).openStream();
@@ -460,8 +513,11 @@ public class Master {
 			is.close();
 		}
 	}
-	
-	
+
+	/** 
+	 * @throws ParseException
+	 * @throws FileNotFoundException
+	 */
 	////////////////////////////////////////////////////////
 
 	//reads settings.txt and initializes
@@ -546,6 +602,10 @@ public class Master {
 		}
 	}
 
+	/** 
+	 * @param min_date
+	 * @throws IOException
+	 */
 	//handles Reading in saved event data that was processed by previous runs of this application.
 	//Only reads in files based on settings.txt
 	private static void getSavedEvents(long min_date) throws IOException {
@@ -568,6 +628,11 @@ public class Master {
 		
 	}
 
+	/** 
+	 * @param s
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	//not for public use
 	public static void enchantProfit(Subset s) throws ParseException, IOException {
 		PrintWriter out = new PrintWriter(new File("enchant_data.txt"));
@@ -593,8 +658,7 @@ public class Master {
 		double crystalsPurchaseavg = crystalsPurchase / Data_processing.sum(s.type("Purchase").name("Veiled Crystal").items,"quantity");
 		double crystalsavg = crystals / Data_processing.sum(s.type("Sale").name("Veiled Crystal").items,"quantity");
 		double umbraavg = umbra / Data_processing.sum(s.type("Sale").name("Umbra Shard").items,"quantity");
-		
-		
+
 		String one = "%-14s";
 		String two = "%11s";
 		String three = "%11s";
@@ -642,8 +706,7 @@ public class Master {
 		out.print(String.format(two, String.format("%.2f", enchantsBought)));
 		out.println("\t"+String.format(three, String.format("%.2f", enchantsBought/Data_processing.sum(s.type("Purchase").loc("Auction").name("Enchant").items,"quantity"))));
 		//sinister(s);
-		
-		
+
 		double cards = Data_processing.sum(s.type("Sale").loc("Auction").name("of the Tides").items,"goldearned") +
 				Data_processing.sum(s.type("Sale").loc("Auction").name("of Blockades").items,"goldearned")+
 		Data_processing.sum(s.type("Sale").loc("Auction").name("of Fathoms").items,"goldearned")+
@@ -700,14 +763,19 @@ public class Master {
 		out.close();
 	}
 
+	/** 
+	 * @param s
+	 * @param file
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	//Writes any/all event data to Purchase.txt and Sales.txt, seperated into various time periods. (Today, Yesterday, The previous 7 days, Total (all events).
 	//Data includes item name, total gold earned/spent, average gold per item
 	private static void writePerDayData(Subset s, String file) throws ParseException, IOException {
 		
 		String one = "%-50s";
 		String two = "%12s";
-	
-		
+
 		System.out.println("writePerDayData");
 		PrintWriter out = new PrintWriter(new FileOutputStream(file, false));
 		Subset a  = s.date(mdy.parse(Master.mdy.format(new Date())).getTime(), mdy.parse(Master.mdy.format(new Date().getTime()+1000*60*60*24l)).getTime());
@@ -718,8 +786,7 @@ public class Master {
 		//System.out.println(mdy.parse(Master.mdy.format(new Date())).getTime()+" to "+ mdy.parse(Master.mdy.format(new Date().getTime()+1000*60*60*24l)).getTime());
 		//System.out.println(mdy.parse(Master.mdy.format(new Date())).getTime()-1000*60*60*24l+" to "+ mdy.parse(Master.mdy.format(new Date().getTime())).getTime());
 		//System.out.println(mdy.parse(Master.mdy.format(new Date())).getTime()-1000*60*60*24*7l);
-		
-		
+
 		out.println("TODAY");
 		
 		out.print(String.format(one, "Total"));
@@ -736,8 +803,7 @@ public class Master {
 			out.println(event);
 		}
 		out.println("\n\n\n\n\n\nYESTERDAY");
-	
-		
+
 		out.print(String.format(one, "Total"));
 		out.println(String.format(two, String.format("%.2f", Data_processing.sum(b.loc("Vendor").items,"goldearned")+ Data_processing.sum(b.loc("Auction").items,"goldearned"))));
 		
@@ -786,6 +852,13 @@ public class Master {
 		out.close();
 	}
 
+	/** 
+	 * @param s
+	 * @param type
+	 * @param loc
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	private static void getPerDayData(Subset s, String type, String loc) throws ParseException, IOException {
 		eventsPerDay.clear();
 		//System.out.println("getPerDayData");
@@ -842,7 +915,12 @@ public class Master {
 			}
 		}
 	}
-	
+
+	/** 
+	 * @param fileName
+	 * @param min_date
+	 * @throws IOException
+	 */
 	//Rads in saved event data that was processed by previous runs of this application
 	private static void readSavedEvents(String fileName,long min_date) throws IOException {
 		System.out.println("readSavedEvents: "+fileName);
@@ -878,7 +956,12 @@ public class Master {
 			System.out.println("File does not exist");
 		}
 	}
-	
+
+	/** 
+	 * @param min
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	//Reads data from TradeSkillMaster.lua files
 	public static void readFiles(long min) throws IOException, ParseException {
 		System.out.println("readFiles");
@@ -934,8 +1017,7 @@ public class Master {
 								Long.parseLong(str.substring(str.lastIndexOf(",")-10,str.lastIndexOf(",")))*1000l>time
 								&&!str.contains(",i:0,")
 									) {
-								
-								
+
 									eventHash.add(str);
 									//System.out.println(str);
 									eventDataHandler(str);
@@ -960,8 +1042,7 @@ public class Master {
 							else {
 								out.println(data);
 							}
-							
-							
+
 						}
 						if(data.contains("bagQuantity")||data.contains("bankQuantity")||data.contains("mailQuantity")||data.contains("reagentBankQuantity")||data.contains("auctionQuantity")) {
 							out.println(data);
@@ -998,8 +1079,7 @@ public class Master {
 							inGuildsObject = true;
 							location=data;
 						}
-						
-	
+
 					}
 				}
 				reader.close();
@@ -1017,7 +1097,11 @@ public class Master {
 		out.close();
 		out2.close();
 	}
-	
+
+	/** 
+	 * @param line
+	 * @throws IOException
+	 */
 	//Event data helper function
 	public static void eventDataHandler(String line) throws IOException {
 		//System.out.println(line);
@@ -1041,7 +1125,13 @@ public class Master {
 			idname.parent.addEvent(e);
 		}
 	}
-	
+
+	/** 
+	 * @param str
+	 * @param s
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	//Writes data so that it's saved for future runs of this program
 	public static void writeSavedEvents(String str, Subset s) throws ParseException, IOException {
 		System.out.println("writeSavedEvents: "+str);
@@ -1059,7 +1149,12 @@ public class Master {
 		events.clear();
 		out.close();
 	}
-	
+
+	/** 
+	 * @param s
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	//handles writing data so that it's saved for future runs of this program
 	public static void writeSavedEvents(Subset s) throws IOException, ParseException {
 		if(Use_Events_All_Save_File) {
@@ -1078,7 +1173,11 @@ public class Master {
 			writeSavedEvents("Events-COD.txt",s.loc("COD"));
 		}
 	}
-	
+
+	/** 
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 	//Reads in IDNames.txt, so that item IDs are associated with item names
 	public static void IDNamesFileIN() throws NumberFormatException, IOException {
 		File file = new File("IDNames.txt");
@@ -1110,7 +1209,10 @@ public class Master {
 			return a.id-b.id;
 		}
 	};
-	
+
+	/** 
+	 * @throws IOException
+	 */
 	//Sorts and then writes all item ID/name combos
 	public static void IDNamesFileOUT() throws IOException {
 		System.out.println("IDNamesFileOut");
@@ -1125,6 +1227,12 @@ public class Master {
 		out.close();
 	}
 
+	/** 
+	 * @param Args[]
+	 * @throws IOException
+	 * @throws ParseException
+	 * @throws URISyntaxException
+	 */
 	public static void main(String Args[]) throws IOException, ParseException, URISyntaxException {
 		System.out.println("Master main");
 		@SuppressWarnings("unused")
@@ -1132,4 +1240,5 @@ public class Master {
 		System.out.println("Done");
 		//System.in.read();
 	}
+	//#endregion
 }

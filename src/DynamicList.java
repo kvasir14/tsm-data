@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -13,12 +12,16 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class DynamicList {
+	//#region properties
 	String filter_type="";
 	DefaultListModel<String> model = new DefaultListModel<>();
 	private JList<String> jList; 
 	private Filter_value value;
 	private JTextField textfield;
 	public static boolean lock = false;
+	//#endregion
+
+	//#region constructors
 	public DynamicList(Filter_value inc_value) {
 		//System.out.println(inc_value.getArray());
 		value = inc_value;
@@ -26,17 +29,27 @@ public class DynamicList {
 		jList=createJList();
 		createTextField();
 		//filterModel((DefaultListModel<String>)jList.getModel(), "");
-		
 	 }
-	 
+	 //#endregion
+
+	 //#region methods
+	 /** 
+	  * @return JList<String>
+	  */
 	 public JList<String> getList() {
 		 return jList;
 	 }
-	 
+
+	 /** 
+	  * @return JTextField
+	  */
 	 public JTextField getTextField() {
 		 return textfield;
 	 }
-	 
+
+	 /** 
+	  * @return Filter_value
+	  */
 	 public Filter_value getFilter_value() {
 		 return value;
 	 }
@@ -59,7 +72,9 @@ public class DynamicList {
 		 textfield= field;
 	}
 
-		
+	 /** 
+	  * @return JList<String>
+	  */
 	 private JList<String> createJList() {
 		 JList<String> list = new JList<String>(createDefaultListModel());
 		 list.setVisibleRowCount(8);
@@ -83,8 +98,7 @@ public class DynamicList {
 						//System.out.println("list update");
 						GUI.filterModelBasedOnOthers();
 						Graph_wrapper.updateGraph();
-						
-						
+
 					} catch (ParseException | IOException e1) {
 						e1.printStackTrace();
 					}
@@ -96,10 +110,14 @@ public class DynamicList {
 		 return list;
 	 }
 
+	/** 
+	 * @return ListModel<String>
+	 */
 	private ListModel<String> createDefaultListModel() {
 			for (String s : value.getArray()) {
 				model.addElement(s);
 			}
 		return model;
 	}
+	//#endregion
 }

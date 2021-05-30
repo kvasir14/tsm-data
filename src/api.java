@@ -18,12 +18,16 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.Scanner;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.google.gson.stream.JsonReader;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,13 +38,26 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.google.gson.stream.JsonReader;
 
+/**
+ * Pulls data from Blizzard API. 
+ * Requires token:secret in apikey.txt
+ */
 public class api {
+	//#region properties
 	static JButton enterBtn;
 	static JButton cancelBtn;
 	static JTextField clientid = new JTextField(15);
 	static JTextField clientsecret = new JTextField(15);
+	//#endregion
+
+	//#region methods
+	/** 
+	 * Converts Reader object to String
+	 * @param rd
+	 * @return String
+	 * @throws IOException
+	 */
 	private static String readAll(Reader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		int cp;
@@ -50,6 +67,13 @@ public class api {
 		return sb.toString();
 	}
 
+	/** 
+	 * Reads JSONObject from url
+	 * @param url
+	 * @return JSONObject
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
 		InputStream is = new URL(url).openStream();
 		try {
@@ -61,7 +85,12 @@ public class api {
 			is.close();		
 		}
 	}
-	
+
+	/** 
+	 * 
+	 * @param url
+	 * @throws IOException
+	 */
 	public static void readJsonStream(String url) throws IOException {
 		InputStream in = new URL(url).openStream();
 		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
@@ -91,8 +120,6 @@ public class api {
 					System.out.println("value: "+str);
 					
 				}
-				//reader.endObject();
-				//reader.endArray();
 				break;
 			}
 		}
@@ -100,6 +127,11 @@ public class api {
 		reader.close();
 	}
 
+	/** 
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static void getapikey() throws URISyntaxException, IOException, ParseException {
 		final URI uri = new URI("https://develop.battle.net/access/");
 		File apikeyfile = new File("apikey.txt");
@@ -116,102 +148,116 @@ public class api {
 			//Master.init();
 		}
 		if(Master.apikey == null || Master.apikey.isEmpty() || Master.apikey.length()==0){
-			class OpenUrlAction implements ActionListener {
-				  @Override public void actionPerformed(ActionEvent e) {
-					open(uri);
-				  }
-				}
-			JFrame frame = new JFrame("Blizzard API");
-			JPanel panel1 = new JPanel();//new FlowLayout());
-			JPanel panel2 = new JPanel();//new FlowLayout());
-			JPanel panel3 = new JPanel();
-		   // JPanel panel2 = new JPanel();//new FlowLayout());
-			frame.getContentPane().setLayout(
-					new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS)
-				);
-			JLabel prompt1 = new JLabel("		Enter Client ID");
-
-			panel1.add(prompt1);
-			panel1.add(clientid);
-			JLabel prompt2 = new JLabel("Enter Client Secret");
-			
-			panel2.add(prompt2);
-			panel2.add(clientsecret);
-			
-		   // JLabel url = new JLabel("Enter Client____ ID ");
-			
-			JButton urlButton = new JButton("test");
-			panel3.add(urlButton,BorderLayout.WEST);
-			urlButton.setText("<HTML><FONT color=\"#000099\"><U>https://develop.battle.net/access</U></FONT></HTML>");
-			//button.setHorizontalAlignment(SwingConstants.LEFT);
-			//button.setBounds(0, 0, 1000, 0);
-			urlButton.setBorderPainted(false);
-			urlButton.setOpaque(false);
-			urlButton.setBackground(Color.WHITE);
-			urlButton.setToolTipText(uri.toString());
-			urlButton.addActionListener(new OpenUrlAction());
-			//frame.add(outer,BorderLayout.SOUTH);
-			frame.add(panel3);
-			frame.add(panel1);
-			frame.add(panel2);
-			enterBtn = new JButton("Enter");
-			enterBtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.out.println(clientid.getText()+":"+clientsecret.getText());
-					Master.apikey=clientid.getText()+":"+clientsecret.getText();
-					try {
-						PrintWriter out = new PrintWriter(apikeyfile);
-						out.print(Master.apikey);
-						out.close();
-						frame.dispose();
-						Master.init();
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
-					
-				}
-				
-			});
-			cancelBtn = new JButton("Cancel");
-			cancelBtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					frame.dispose();
-					
-				}
-				
-			});
-			JPanel buttonPanel = new JPanel();
-			buttonPanel.add(cancelBtn,BorderLayout.EAST);
-			buttonPanel.add(enterBtn,BorderLayout.WEST);
-			frame.add(buttonPanel);
-			frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			frame.pack();
-			frame.setLocationRelativeTo(null);
-			frame.setVisible(true);
+			getapikey_gui(uri, apikeyfile);
 			
 		}
 		else {
 			Master.IDNamesFileIN();
 			Master.two();
-			
 		}
 	}
-	
+
+	private static void getapikey_gui(final URI uri, File apikeyfile) {
+		class OpenUrlAction implements ActionListener {
+			@Override public void actionPerformed(ActionEvent e) {
+				open(uri);
+			}
+		}
+		JFrame frame = new JFrame("Blizzard API");
+		JPanel panel1 = new JPanel();//new FlowLayout());
+		JPanel panel2 = new JPanel();//new FlowLayout());
+		JPanel panel3 = new JPanel();
+		// JPanel panel2 = new JPanel();//new FlowLayout());
+		frame.getContentPane().setLayout(
+				new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS)
+			);
+		JLabel prompt1 = new JLabel("		Enter Client ID");
+
+		panel1.add(prompt1);
+		panel1.add(clientid);
+		JLabel prompt2 = new JLabel("Enter Client Secret");
+		
+		panel2.add(prompt2);
+		panel2.add(clientsecret);
+		
+		// JLabel url = new JLabel("Enter Client____ ID ");
+		
+		JButton urlButton = new JButton("test");
+		panel3.add(urlButton,BorderLayout.WEST);
+		urlButton.setText("<HTML><FONT color=\"#000099\"><U>https://develop.battle.net/access</U></FONT></HTML>");
+		//button.setHorizontalAlignment(SwingConstants.LEFT);
+		//button.setBounds(0, 0, 1000, 0);
+		urlButton.setBorderPainted(false);
+		urlButton.setOpaque(false);
+		urlButton.setBackground(Color.WHITE);
+		urlButton.setToolTipText(uri.toString());
+		urlButton.addActionListener(new OpenUrlAction());
+		//frame.add(outer,BorderLayout.SOUTH);
+		frame.add(panel3);
+		frame.add(panel1);
+		frame.add(panel2);
+		enterBtn = new JButton("Enter");
+		enterBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(clientid.getText()+":"+clientsecret.getText());
+				Master.apikey=clientid.getText()+":"+clientsecret.getText();
+				try {
+					PrintWriter out = new PrintWriter(apikeyfile);
+					out.print(Master.apikey);
+					out.close();
+					frame.dispose();
+					Master.init();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+			
+		});
+		cancelBtn = new JButton("Cancel");
+		cancelBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				
+			}
+			
+		});
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(cancelBtn,BorderLayout.EAST);
+		buttonPanel.add(enterBtn,BorderLayout.WEST);
+		frame.add(buttonPanel);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+
+	/** 
+	 * @param uri
+	 */
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
 		  try {
 			Desktop.getDesktop().browse(uri);
-		  } catch (IOException e) { /* TODO: error handling */ }
-		} else { /* TODO: error handling */ }
+		  } catch (IOException e) {
+			  /* TODO: error handling */ 
+			}
+		} else {
+			/* TODO: error handling */ 
+		}
 	  }
-	
-	
+
+	/** 
+	 * Get OAuth Token
+	 * @param userpass
+	 * @return String
+	 */
 	public static String get_token(String userpass) {
 		String basicAuth = new String(new Base64().encode(userpass.getBytes()));
 		CloseableHttpResponse response = null;
@@ -248,6 +294,5 @@ public class api {
 		
 		return "";
 	}
-	
-
+	//#endregion
 }

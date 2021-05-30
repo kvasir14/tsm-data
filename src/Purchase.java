@@ -1,8 +1,12 @@
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-	
+
+/**
+ * Represents a purchase event in-game
+ */
 public class Purchase extends Event{
+	//#region constructors
 	Purchase(List<String> data) throws IOException {
 		super(data);
 		//System.out.println(inc_data);
@@ -25,4 +29,5 @@ public class Purchase extends Event{
 		callback();
 		Master.allEvents.add(this);
 	}
+	//#endregion
 }

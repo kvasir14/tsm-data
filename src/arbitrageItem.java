@@ -14,7 +14,10 @@ public class arbitrageItem {
 		add(str);
 		
 	}
-	
+
+	/** 
+	 * @param obj
+	 */
 	public void add(JSONObject obj) {
 		//System.out.println(obj);
 		Double quantity = Double.parseDouble(obj.get("quantity").toString());
@@ -30,7 +33,10 @@ public class arbitrageItem {
 			prices.put(goldDouble, prices.get(goldDouble)+ quantity.intValue());
 		}
 	}
-	
+
+	/** 
+	 * @return List<Double>
+	 */
 	public List<Double> calculateMagnitudes() {
 		
 		int counter = 0;

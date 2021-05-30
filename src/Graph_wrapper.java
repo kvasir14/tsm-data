@@ -14,24 +14,36 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RefineryUtilities;
 
 public class Graph_wrapper {
+	//#region properties
 	static Graph chart;
 	static long interval;
 	static Subset subset;
+	//#endregion
+
+	//#region methods
+	/** 
+	 * @param intv
+	 * @param s
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static void init(long intv, Subset s) throws ParseException, IOException {
 		
 		//Time_series.init(s);
-		
 
-		
 		System.out.println("graph");
 		subset=s;
 		interval=intv;
-		
 
-		
       createGraph(interval,s);
 	}
-	
+
+	/** 
+	 * @param interval
+	 * @param s
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static void createGraph(long interval, Subset s) throws ParseException, IOException {
 		chart = new Graph("Gold Per Day" , "", "date", "gold", getData(s),s);
 		chart.pack( );
@@ -42,11 +54,13 @@ public class Graph_wrapper {
             	GUI.createAndShowGUI(s);
             }
         });
-		 
-		
-		
+
 	}
-	
+
+	/** 
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static void updateGraph() throws ParseException, IOException {
 		
 		//System.out.println("updateGraph");
@@ -81,7 +95,14 @@ public class Graph_wrapper {
 		//chart.setVisible( true );	
 		
 	}
-	
+
+	/** 
+	 * @param interval
+	 * @param subset
+	 * @return DefaultCategoryDataset
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	private static DefaultCategoryDataset G_QperInterval(long interval, Subset subset) throws ParseException, IOException {
 		int count =0;
 		//interval = interval /24;
@@ -114,7 +135,13 @@ public class Graph_wrapper {
 		System.out.println("avg value: "+String.format("%.2f", Data_processing.sum(subset.items,"goldspent")/(((endDay-startDay)/interval)-1)));
 		return dataset;
 	}
-	
+
+	/** 
+	 * @param subset
+	 * @return XYDataset
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	private static XYDataset getData(Subset subset) throws ParseException, IOException {
 		List<Long> xcoords = new ArrayList<Long>();
 		List<Long> ycoords = new ArrayList<Long>();
@@ -179,6 +206,5 @@ public class Graph_wrapper {
 		}
 		return new TimeSeriesCollection(dataset);
 	}
-
-
+	//#endregion
 }

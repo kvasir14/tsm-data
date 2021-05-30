@@ -2,7 +2,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a sale event in-game
+ * 
+ */
 public class Sale extends Event{
+	//#region constructors
 	Sale(List<String> data) throws IOException {
 		super(data);
 		id = data.get(3);
@@ -20,4 +25,5 @@ public class Sale extends Event{
 		callback();
 		Master.allEvents.add(this);
 	}
+	//#endregion
 }

@@ -2,8 +2,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a expense event in-game. Different than an purchase.
+ */
 public class Expense extends Event {
-
+	//#region constructors
 	Expense(List<String> data) throws IOException {
 		super(data);
 		//System.out.println("Expense Constructor");
@@ -20,4 +23,5 @@ public class Expense extends Event {
 		callback();
 		Master.allEvents.add(this);
 	}
+	//#endregion
 }

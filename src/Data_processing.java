@@ -15,6 +15,11 @@ import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 
 public class Data_processing {
+	//#region methods
+	/** 
+	 * @param str
+	 * @return String
+	 */
 	public static String parseFixes(String str) {
 		str = str.replace("\",", "");
 		str = str.replace("\"", "");
@@ -26,7 +31,10 @@ public class Data_processing {
 		}
 		return str;
 	}
-	
+
+	/** 
+	 * @param events
+	 */
 	public static void removeUnknownItems(ArrayList<Event> events) {
 		Iterator<Event> i = events.iterator();
 		while (i.hasNext()) {
@@ -36,7 +44,11 @@ public class Data_processing {
 			}
 		}
 	}
-	
+
+	/** 
+	 * @param str
+	 * @return String
+	 */
 	public String addSpaces(String str) {
 		String spaces ="";
 		for(int i=str.length(); i<50; i++) {
@@ -45,7 +57,11 @@ public class Data_processing {
 		}
 		return spaces+"\t";
 	}
-	
+
+	/** 
+	 * @param num
+	 * @return String
+	 */
 	public static String addSpaces(int num) {
 		String spaces ="";
 		for(int i=num; i<50; i++) {
@@ -54,7 +70,11 @@ public class Data_processing {
 		}
 		return spaces+"\t";
 	}
-	
+
+	/** 
+	 * @param id
+	 * @return IDName
+	 */
 	public static IDName getIDName(int id) {
 		for(IDName element : Master.idnames) {
 			if(element.id==id) {
@@ -63,7 +83,11 @@ public class Data_processing {
 		}
 		return null;
 	}
-	
+
+	/** 
+	 * @param name
+	 * @return IDName
+	 */
 	public static IDName getIDNameFromName(String name) {
 		for(IDName element : Master.idnames) {
 			if(element.name.equals(name)) {
@@ -72,11 +96,20 @@ public class Data_processing {
 		}
 		return null;
 	}
-	
+
+	/** 
+	 * @param id
+	 * @return IDName
+	 */
 	public static IDName getIDName(String id) {
 		return getIDName(idToShortID(id));
 	}
-	
+
+	/** 
+	 * @param id
+	 * @return IDName
+	 * @throws IOException
+	 */
 	public static IDName idToIDName(int id) throws IOException{
 		IDName idname = getIDName(id);
 		if(idname!=null) {
@@ -129,13 +162,21 @@ public class Data_processing {
 		
 		return new_idname;
 	}
-	
+
+	/** 
+	 * @param id
+	 * @return IDName
+	 * @throws IOException
+	 */
 	public static IDName idToIDName(String id) throws IOException{
 		return idToIDName(idToShortID(id));
 		
 	}
-	
-	
+
+	/** 
+	 * @param folder
+	 * @return List<File>
+	 */
 	//returns a List<File> of all JSON files in a given folder
 	public static List<File> listFilesForFolder(final File folder) {
 		List<File> files = new ArrayList<File>();
@@ -149,7 +190,11 @@ public class Data_processing {
 		}
 		return files;
 	}
-	
+
+	/** 
+	 * @param results
+	 * @return List<String>
+	 */
 	public static List<String> sortStringArayAsIntArray(List<String> results){
 		//System.out.println("INCOMING: "+results);
 		boolean containedNone = false;
@@ -199,11 +244,20 @@ public class Data_processing {
 		return results;
 		
 	}
-	
+
+	/** 
+	 * @param s
+	 * @return boolean
+	 */
 	public static boolean isInteger(String s) {
 		return isInteger(s,10);
 	}
 
+	/** 
+	 * @param s
+	 * @param radix
+	 * @return boolean
+	 */
 	public static boolean isInteger(String s, int radix) {
 		if(s.isEmpty()) return false;
 		for(int i = 0; i < s.length(); i++) {
@@ -215,7 +269,11 @@ public class Data_processing {
 		}
 		return true;
 	}
-	
+
+	/** 
+	 * @param id
+	 * @return int
+	 */
 	public static int idToShortID(String id) {
 		String shortID = id;
 		if(shortID.contains(":")) {
@@ -239,7 +297,11 @@ public class Data_processing {
 		
 		return Integer.parseInt(shortID);
 	}
-	
+
+	/** 
+	 * @param id
+	 * @return String
+	 */
 	public static String bonusIDS(String id) {
 		String bonusIDs = "";
 		if(id.contains("::")) {
@@ -248,7 +310,12 @@ public class Data_processing {
 		
 		return bonusIDs;
 	}
-	
+
+	/** 
+	 * @param s
+	 * @param value
+	 * @return List<String>
+	 */
 	public static List<String> getPossibleValues(Subset s, String value){
 		List<String> values = new ArrayList<String>();
 		List<Integer> id_values = new ArrayList<Integer>();
@@ -306,7 +373,13 @@ public class Data_processing {
 		//System.out.println(values);
 		return values;
 	}
-	
+
+	/** 
+	 * @param subset
+	 * @return Subset
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static Subset updateGraphbyFilters(Subset subset) throws ParseException, IOException{
 		Subset s=subset;
 		if(Graph.account.active()) {
@@ -357,7 +430,14 @@ public class Data_processing {
 		}
 		return s;
 	}
-	
+
+	/** 
+	 * @param subset
+	 * @param filter
+	 * @return Subset
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static Subset updateGraphbyFilters(Subset subset, String filter) throws ParseException, IOException{
 		Subset s=subset;
 		if(Graph.account.active()&&!filter.equals("Account")) {
@@ -408,14 +488,24 @@ public class Data_processing {
 		}
 		return s;
 	}
-	
+
+	/** 
+	 * @param s
+	 * @return String
+	 */
 	public static String stripAccents(String s) 
 	{
 		s = Normalizer.normalize(s, Normalizer.Form.NFD);
 		s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 		return s;
 	}
-	
+
+	/** 
+	 * @param model
+	 * @param value
+	 * @param filter
+	 * @return DefaultListModel<String>
+	 */
 	public static DefaultListModel<String> filterModel(DefaultListModel<String> model, Filter_value value, String filter) {
 		System.out.println("filterModel");
 		//System.out.println(value.getFilter()+": "+model);
@@ -477,14 +567,22 @@ public class Data_processing {
 		}
 		return null;
 	}
-	
+
+	/** 
+	 * @param list
+	 * @return int[]
+	 */
 	static int[] toIntArray(List<Integer> list){
 		  int[] ret = new int[list.size()];
 		  for(int i = 0;i < ret.length;i++)
 			ret[i] = list.get(i);
 		  return ret;
 		}
-	
+
+	/** 
+	 * @param data
+	 * @return String
+	 */
 	public static String whatTypeEvent(String data) {
 		if(data.contains("internalData@csvSales")) {
 			return "Sale";
@@ -497,7 +595,11 @@ public class Data_processing {
 		}
 		return null;
 	}
-	
+
+	/** 
+	 * @param dir
+	 * @return ArrayList<String>
+	 */
 	public static ArrayList<String> cleanArrayListToString(ArrayList<String> dir) {
 		//System.out.println(dir);
 		for(int i=0; i<dir.size(); i++) {
@@ -506,7 +608,14 @@ public class Data_processing {
 		//System.out.println(dir);
 		return dir;
 	}
-	
+
+	/** 
+	 * @param items
+	 * @param variable
+	 * @return double
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static double sum(List<Item> items, String variable) throws ParseException, IOException {
 		double sum=0d;
 		for(Item item : items) {
@@ -517,11 +626,26 @@ public class Data_processing {
 		return sum;
 		
 	}
-	
+
+	/** 
+	 * Returns average price of the given List<Item>
+	 * @param list
+	 * @param variable
+	 * @return double
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static double avg(List<Item> list, String variable) throws ParseException, IOException {
 		return sum(list,variable)/sum(list,"quanity");
 	}
-	
+
+	/** 
+	 * @param list
+	 * @param variable
+	 * @return double
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static double min(List<Item> list, String variable) throws ParseException, IOException {
 		double min=0d;
 		for(int i=0; i<list.size(); i++) {
@@ -534,7 +658,14 @@ public class Data_processing {
 		}
 		return min;
 	}
-	
+
+	/** 
+	 * @param items
+	 * @param variable
+	 * @return double
+	 * @throws ParseException
+	 * @throws IOException
+	 */
 	public static double max(List<Item> items, String variable) throws ParseException, IOException {
 		double max=0d;
 		for(int i=0; i<items.size(); i++) {
@@ -549,7 +680,13 @@ public class Data_processing {
 		}
 		return max;
 	}
-	
+
+	/** 
+	 * @param string
+	 * @param e
+	 * @return double
+	 * @throws IOException
+	 */
 	public static double whichMemberVariable(String string, Event e) throws IOException {
 		switch(string.toLowerCase()) {
 		case "quantity":
@@ -569,18 +706,29 @@ public class Data_processing {
 		}
 		return -666d;
 	}
-	
+
+	/** 
+	 * @param gold
+	 * @return String
+	 */
 	public static String formatGold(double gold) {
 		return String.format("%.2f", gold);
 	}
 
-
+	/** 
+	 * @param events
+	 */
 	public static void printEventArray(List<Event> events) {
 		for(Event e : events) {
 			System.out.println(e.data);
 		}
 	}
-	
+
+	/** 
+	 * @param data
+	 * @return Event
+	 * @throws IOException
+	 */
 	public static Event createNewEvent(List<String> data) throws IOException {
 		switch(data.get(2).toLowerCase()) {
 			case "sale":
@@ -593,4 +741,5 @@ public class Data_processing {
 		System.out.println("Returned null");
 		return null;
 	}
+	//#endregion
 }

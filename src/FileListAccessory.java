@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -14,16 +15,15 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 public class FileListAccessory extends JComponent implements PropertyChangeListener {
-
-	/**
-	 *
-	 */
+	//#region properties
 	private static final long serialVersionUID = 3383822926317671395L;
 	private File file = null;
 	private DefaultListModel model;
 	private JList list;
 	private JButton removeItem;
+	//#endregion
 
+	//#region constructors
 	public FileListAccessory(JFileChooser chooser) {
 		chooser.addPropertyChangeListener(this);
 
@@ -38,9 +38,13 @@ public class FileListAccessory extends JComponent implements PropertyChangeListe
 		setLayout(new BorderLayout());
 		add(pane);
 		add(removeItem, BorderLayout.SOUTH);
-
 	}
+	//#endregion
 
+	//#region methods
+	/** 
+	 * @return DefaultListModel
+	 */
 	public DefaultListModel getModel() {
 		return model;
 	}
@@ -55,6 +59,9 @@ public class FileListAccessory extends JComponent implements PropertyChangeListe
 		}
 	}
 
+	/** 
+	 * @return JButton
+	 */
 	private JButton createRemoveItemButton() {
 		JButton button = new JButton("Remove");
 		button.addActionListener(new ActionListener(){
@@ -66,6 +73,9 @@ public class FileListAccessory extends JComponent implements PropertyChangeListe
 		return button;
 	}
 
+	/** 
+	 * @param e
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		boolean update = false;
@@ -85,4 +95,5 @@ public class FileListAccessory extends JComponent implements PropertyChangeListe
 			addFileToList();
 		}
 	}
+	//#endregion
 }

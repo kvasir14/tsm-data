@@ -20,10 +20,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
 public class FileChooser {
-
+	//#region properties
 	static JFrame frame = new JFrame("Add Files");
+	//#endregion
+	
+	//#region methods
+	/** 
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static void checkForSavedDirectories() throws IOException, ParseException {
 		System.out.println("checkForSavedDirectories");
 		File directoriesFile = new File("data-file-locations.txt");
@@ -118,8 +124,7 @@ public class FileChooser {
 			}
 		});
 	}
-	
-	
+
 	public static void getDirectories(){
 		System.out.println("fileChooser.getDirectories()");
 		JTextArea text = new JTextArea(5,20);
@@ -155,4 +160,5 @@ public class FileChooser {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
+	//#endregion
 }
