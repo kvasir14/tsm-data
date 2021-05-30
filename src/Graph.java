@@ -33,18 +33,18 @@ public class Graph extends ApplicationFrame {
 	public static JFreeChart lineChart;
 	
    public Graph( String applicationTitle , String chartTitle, String xaxis, String yaxis, XYDataset dataset, Subset subset) throws ParseException, IOException {
-      super(applicationTitle);
-      List<String> values = new ArrayList<String>() {/**
+	  super(applicationTitle);
+	  List<String> values = new ArrayList<String>() {/**
 		 *
 		 */
 		private static final long serialVersionUID = -6992133666776967787L;
 
 	{
-    	    add("Average");
-    	    add("Quantity");
-    	    add("Sum");
-    	}};
-    	Graph.graphOptions.setArray(values);;
+			add("Average");
+			add("Quantity");
+			add("Sum");
+		}};
+		Graph.graphOptions.setArray(values);;
 		Graph.account.setArray(Data_processing.getPossibleValues(subset, "account"));
 		Graph.character.setArray(Data_processing.getPossibleValues(subset, "character"));
 		Graph.realm.setArray(Data_processing.getPossibleValues(subset, "realm"));
@@ -54,32 +54,32 @@ public class Graph extends ApplicationFrame {
 		Graph.otherPlayer.setArray(Data_processing.getPossibleValues(subset, "otherPlayer"));
 		Graph.loc.setArray(Data_processing.getPossibleValues(subset, "loc"));
 		
-      lineChart = ChartFactory.createTimeSeriesChart(
-              "Gold Per Day",
-              "Day",
-              "Gold",
-              dataset,
-              false,
-              true,
-              true);
-     // lineChart.getXYPlot().getRangeAxis().setAutoRange(true);
-      //lineChart.getXYPlot().getDomainAxis().setAutoRange(true);
-      //lineChart.getXYPlot().getRangeAxis().
-      XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) lineChart.getXYPlot().getRenderer();
-      renderer.setBaseShapesVisible(true);
-      Double d =1.5d;
-      Shape circle = new Ellipse2D.Double(-1*d, -1*d, 2*d, 2*d);
-      renderer.setSeriesShape(0, circle);
-      ChartPanel chartPanel = new ChartPanel( lineChart );
-     
-      chartPanel.setPreferredSize( new java.awt.Dimension( 1200 , 600 ) );
-      //chartPanel.setHorizontalAxisTrace(true);
-      //chartPanel.setVerticalAxisTrace(true);
-     
-      chartPanel.setRangeZoomable(false);
+	  lineChart = ChartFactory.createTimeSeriesChart(
+			  "Gold Per Day",
+			  "Day",
+			  "Gold",
+			  dataset,
+			  false,
+			  true,
+			  true);
+	 // lineChart.getXYPlot().getRangeAxis().setAutoRange(true);
+	  //lineChart.getXYPlot().getDomainAxis().setAutoRange(true);
+	  //lineChart.getXYPlot().getRangeAxis().
+	  XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) lineChart.getXYPlot().getRenderer();
+	  renderer.setBaseShapesVisible(true);
+	  Double d =1.5d;
+	  Shape circle = new Ellipse2D.Double(-1*d, -1*d, 2*d, 2*d);
+	  renderer.setSeriesShape(0, circle);
+	  ChartPanel chartPanel = new ChartPanel( lineChart );
+	 
+	  chartPanel.setPreferredSize( new java.awt.Dimension( 1200 , 600 ) );
+	  //chartPanel.setHorizontalAxisTrace(true);
+	  //chartPanel.setVerticalAxisTrace(true);
+	 
+	  chartPanel.setRangeZoomable(false);
 
-      //restoreAutoBounds(chartPanel.ZOOM_RESET_RANGE_COMMAND);
-      chartPanel.addMouseListener(new MouseListener() {
+	  //restoreAutoBounds(chartPanel.ZOOM_RESET_RANGE_COMMAND);
+	  chartPanel.addMouseListener(new MouseListener() {
 
 
 		@Override
@@ -111,39 +111,37 @@ public class Graph extends ApplicationFrame {
 			//chartPanel.restoreAutoRangeBounds();
 			
 		}
-    	  
-      });
-      chartPanel.addMouseMotionListener(new MouseMotionListener() {
+		  
+	  });
+	  chartPanel.addMouseMotionListener(new MouseMotionListener() {
 
 		@Override
 		public void mouseDragged(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent arg0) {
 			//chartPanel.restoreAutoRangeBounds();
 			//chartPanel.range
-			
 		}
-    	  
-      });
-      chartPanel.addMouseWheelListener(new MouseWheelListener() {
-    	  @Override
-          public void mouseWheelMoved(MouseWheelEvent arg0) {
-              if (arg0.getWheelRotation() > 0) {
-                  chartPanel.zoomOutDomain(0.5, 0.5);
-              } else if (arg0.getWheelRotation() < 0) {
-                  chartPanel.zoomInDomain(1.5, 1.5);
-              }
-              //chartPanel.restoreAutoRangeBounds();
-              ///chartPanel.auto
-              
-          }
-      });
+		  
+	  });
+	  chartPanel.addMouseWheelListener(new MouseWheelListener() {
+		  @Override
+		  public void mouseWheelMoved(MouseWheelEvent arg0) {
+			  if (arg0.getWheelRotation() > 0) {
+				  chartPanel.zoomOutDomain(0.5, 0.5);
+			  } else if (arg0.getWheelRotation() < 0) {
+				  chartPanel.zoomInDomain(1.5, 1.5);
+			  }
+			  //chartPanel.restoreAutoRangeBounds();
+			  ///chartPanel.auto
+			  
+		  }
+	  });
 
-      setContentPane( chartPanel );
+	  setContentPane( chartPanel );
    }
    
    

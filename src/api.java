@@ -34,15 +34,12 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.gson.stream.JsonReader;
 
 public class api {
 	static JButton enterBtn;
 	static JButton cancelBtn;
-	static //static JButton enterBtn;
-	//GridLayout grid = new GridLayout(2,4);
-	JTextField clientid = new JTextField(15);
+	static JTextField clientid = new JTextField(15);
 	static JTextField clientsecret = new JTextField(15);
 	private static String readAll(Reader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();

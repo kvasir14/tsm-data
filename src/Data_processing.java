@@ -114,9 +114,9 @@ public class Data_processing {
 			org.json.JSONObject json = api.readJsonFromUrl("https://us.api.blizzard.com/data/wow/item/"+id+"?namespace=static-us&locale=en_US&access_token="+Master.api_token);
 			
 			//System.out.println(json.toString());
-		    //System.out.println(json.get("name"));
-		    String name = json.get("name").toString();
-		    new_idname = new IDName(id,name);
+			//System.out.println(json.get("name"));
+			String name = json.get("name").toString();
+			new_idname = new IDName(id,name);
 			System.out.println("*Added: "+id+", "+name);
 			Master.idnames.add(new_idname);
 			PrintWriter out = new PrintWriter(new FileOutputStream(new File("IDNames.txt"), true));
@@ -126,7 +126,7 @@ public class Data_processing {
 		catch (java.io.FileNotFoundException e) {
 			System.out.println("ERROR ERROR ERROR "+ id);
 		}
-	    
+		
 		return new_idname;
 	}
 	
@@ -139,15 +139,15 @@ public class Data_processing {
 	//returns a List<File> of all JSON files in a given folder
 	public static List<File> listFilesForFolder(final File folder) {
 		List<File> files = new ArrayList<File>();
-	    for (final File fileEntry : folder.listFiles()) {
-	        if (fileEntry.isDirectory()) {
-	            listFilesForFolder(fileEntry);
-	        } else if(fileEntry.getName().endsWith(".json")){
-	           files.add(fileEntry);
-	          // System.out.println(fileEntry.getName())
-	        }
-	    }
-	    return files;
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				listFilesForFolder(fileEntry);
+			} else if(fileEntry.getName().endsWith(".json")){
+			   files.add(fileEntry);
+			  // System.out.println(fileEntry.getName())
+			}
+		}
+		return files;
 	}
 	
 	public static List<String> sortStringArayAsIntArray(List<String> results){
@@ -201,19 +201,19 @@ public class Data_processing {
 	}
 	
 	public static boolean isInteger(String s) {
-	    return isInteger(s,10);
+		return isInteger(s,10);
 	}
 
 	public static boolean isInteger(String s, int radix) {
-	    if(s.isEmpty()) return false;
-	    for(int i = 0; i < s.length(); i++) {
-	        if(i == 0 && s.charAt(i) == '-') {
-	            if(s.length() == 1) return false;
-	            else continue;
-	        }
-	        if(Character.digit(s.charAt(i),radix) < 0) return false;
-	    }
-	    return true;
+		if(s.isEmpty()) return false;
+		for(int i = 0; i < s.length(); i++) {
+			if(i == 0 && s.charAt(i) == '-') {
+				if(s.length() == 1) return false;
+				else continue;
+			}
+			if(Character.digit(s.charAt(i),radix) < 0) return false;
+		}
+		return true;
 	}
 	
 	public static int idToShortID(String id) {
@@ -295,7 +295,7 @@ public class Data_processing {
 			}
 			Collections.sort(id_values);
 			List<String> sNumbers = id_values.stream().map(
-				    n -> n.toString()).collect(Collectors.toList()
+					n -> n.toString()).collect(Collectors.toList()
 				);
 			//sNumbers.add(0, "<None>");
 			return (ArrayList<String>) sNumbers;
@@ -411,9 +411,9 @@ public class Data_processing {
 	
 	public static String stripAccents(String s) 
 	{
-	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
-	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-	    return s;
+		s = Normalizer.normalize(s, Normalizer.Form.NFD);
+		s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+		return s;
 	}
 	
 	public static DefaultListModel<String> filterModel(DefaultListModel<String> model, Filter_value value, String filter) {
@@ -481,7 +481,7 @@ public class Data_processing {
 	static int[] toIntArray(List<Integer> list){
 		  int[] ret = new int[list.size()];
 		  for(int i = 0;i < ret.length;i++)
-		    ret[i] = list.get(i);
+			ret[i] = list.get(i);
 		  return ret;
 		}
 	

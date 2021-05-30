@@ -20,7 +20,7 @@ public class arbitrageItem {
 		Double quantity = Double.parseDouble(obj.get("quantity").toString());
 		Double goldDouble = (Double.parseDouble(obj.get("buyout").toString())/10000d)/quantity;
 		DecimalFormat df = new DecimalFormat("#.##");
-        goldDouble = Double.parseDouble(df.format(goldDouble));
+		goldDouble = Double.parseDouble(df.format(goldDouble));
 		//System.out.println((Double.parseDouble(obj.get("buyout").toString()))+"\t\t"+(Double.valueOf(obj.get("buyout").toString())/quantity)+"\t"+(Double.valueOf(obj.get("buyout").toString())/quantity)/10000+"\t\t"+obj.get("quantity").toString());
 		if(prices.get(goldDouble) == null) {
 			prices.put(goldDouble, quantity.intValue());
@@ -42,7 +42,7 @@ public class arbitrageItem {
 			int quantity = prices.get(gold);
 			if(totalQuantity>magnitudes[counter]) {
 				DecimalFormat df = new DecimalFormat("#.##");
-		        Double avg = Double.parseDouble(df.format(totalGold/totalQuantity));
+				Double avg = Double.parseDouble(df.format(totalGold/totalQuantity));
 				averages.add(counter,avg);
 				counter++;
 			}

@@ -9,23 +9,18 @@ public class Item {
 	
 	public Item(IDName inc_idname) throws IOException{
 		count++;
-		//System.out.println("Item Constructor");
 		idname = inc_idname;
 	}
 	
 	public Item(IDName inc_idname, List<Event> new_events) throws IOException{
 		count++;
-		//System.out.println("Item Constructor");
 		idname = inc_idname;
 		events = new_events;
 	}
 	
 	public Item(int id, Subset s) throws IOException{
 		count++;
-		//System.out.println(s.items.size());
-		//System.out.println("Item Constructor");
 		idname = Data_processing.idToIDName(id);
-		//System.out.println(s.items);
 		events = s.items.get(0).events;
 	}
 	

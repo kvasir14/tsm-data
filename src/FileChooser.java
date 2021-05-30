@@ -55,67 +55,67 @@ public class FileChooser {
 	public static void manuallyGetFiles() {
 		frame.dispose();
 		SwingUtilities.invokeLater(new Runnable() {
-		    @Override
-		    public void run() {
-		        try {
-		        	System.out.println("manual");
-		        	PrintWriter out = new PrintWriter(new File("data-file-locations.txt"));
-		            JFileChooser fc = new JFileChooser();
-		            FileListAccessory accessory = new FileListAccessory(fc);
-		            fc.setAccessory(accessory);
-		            //fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		            int open = fc.showOpenDialog(fc);
-		            if (open == JFileChooser.APPROVE_OPTION) {
-		                DefaultListModel model = accessory.getModel();
-		                for (int i = 0; i < model.getSize(); i++) {
-		                    out.println(((File) model.getElementAt(i)).getPath());
-		                }
-		                System.out.println("Done choosing files");
-		            }
-		            out.close();
-		            Master.three();
-		        } catch (IOException | ParseException e) {
-		            // TODO Auto-generated catch block
-		            e.printStackTrace();
-		        }
-		    }
+			@Override
+			public void run() {
+				try {
+					System.out.println("manual");
+					PrintWriter out = new PrintWriter(new File("data-file-locations.txt"));
+					JFileChooser fc = new JFileChooser();
+					FileListAccessory accessory = new FileListAccessory(fc);
+					fc.setAccessory(accessory);
+					//fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+					int open = fc.showOpenDialog(fc);
+					if (open == JFileChooser.APPROVE_OPTION) {
+						DefaultListModel model = accessory.getModel();
+						for (int i = 0; i < model.getSize(); i++) {
+							out.println(((File) model.getElementAt(i)).getPath());
+						}
+						System.out.println("Done choosing files");
+					}
+					out.close();
+					Master.three();
+				} catch (IOException | ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		});
 	}
 	
 	public static void automaticallyGetFiles(){
 		frame.dispose();
 		SwingUtilities.invokeLater(new Runnable() {
-		    @Override
-		    public void run() {
-		        try {
-		        	System.out.println("automatic");
-		        	PrintWriter out = new PrintWriter(new File("data-file-locations.txt"));
-		            JFileChooser fc = new JFileChooser();
-		            //FileListAccessory accessory = new FileListAccessory(fc);
-		            //fc.setAccessory(accessory);
-		            File wowFolder = new File("C:\\Program Files (x86)\\World of Warcraft\\_retail_\\WTF\\");
-		            fc.setCurrentDirectory(wowFolder);
-		            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		            int open = fc.showOpenDialog(fc);
-		            if (open == JFileChooser.APPROVE_OPTION) {
-		            	File file = new File(fc.getSelectedFile()+"\\Account\\");
-		        		String[] temp_directories = file.list(new FilenameFilter() {
-		        			  public boolean accept(File current, String name) {
-		        			    return new File(current, name).isDirectory()&&!name.equals("SavedVariables")&&name.contains("#");
-		        			  }
-		        			});
-		        			for(String dir : Data_processing.cleanArrayListToString(new ArrayList<String>(Arrays.asList(Arrays.toString(temp_directories).split(","))))) {
-		        				String fullFilePath = file.getPath()+"\\"+dir+"\\SavedVariables\\\\TradeSkillMaster.lua";
-		        				out.println(fullFilePath);
-		        				Master.directories.add(fullFilePath);
-		        			}
-		            }
-		            out.close();
-		            Master.three();
-		        } catch (IOException | ParseException e) {
-		            e.printStackTrace();
-		        }
-		    }
+			@Override
+			public void run() {
+				try {
+					System.out.println("automatic");
+					PrintWriter out = new PrintWriter(new File("data-file-locations.txt"));
+					JFileChooser fc = new JFileChooser();
+					//FileListAccessory accessory = new FileListAccessory(fc);
+					//fc.setAccessory(accessory);
+					File wowFolder = new File("C:\\Program Files (x86)\\World of Warcraft\\_retail_\\WTF\\");
+					fc.setCurrentDirectory(wowFolder);
+					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					int open = fc.showOpenDialog(fc);
+					if (open == JFileChooser.APPROVE_OPTION) {
+						File file = new File(fc.getSelectedFile()+"\\Account\\");
+						String[] temp_directories = file.list(new FilenameFilter() {
+							  public boolean accept(File current, String name) {
+								return new File(current, name).isDirectory()&&!name.equals("SavedVariables")&&name.contains("#");
+							  }
+							});
+							for(String dir : Data_processing.cleanArrayListToString(new ArrayList<String>(Arrays.asList(Arrays.toString(temp_directories).split(","))))) {
+								String fullFilePath = file.getPath()+"\\"+dir+"\\SavedVariables\\\\TradeSkillMaster.lua";
+								out.println(fullFilePath);
+								Master.directories.add(fullFilePath);
+							}
+					}
+					out.close();
+					Master.three();
+				} catch (IOException | ParseException e) {
+					e.printStackTrace();
+				}
+			}
 		});
 	}
 	
@@ -151,8 +151,8 @@ public class FileChooser {
 		panel.setLayout(new FlowLayout());
 		frame.add(panel,BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
 }

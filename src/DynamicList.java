@@ -59,7 +59,7 @@ public class DynamicList {
 		 textfield= field;
 	}
 
-	    
+		
 	 private JList<String> createJList() {
 		 JList<String> list = new JList<String>(createDefaultListModel());
 		 list.setVisibleRowCount(8);
