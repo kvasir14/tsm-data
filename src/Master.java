@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,10 +84,10 @@ public class Master {
 	public static void three() throws IOException, ParseException {
 		//System.out.println(Master.directories);
 		//arbitrage();
-		
+		//getAuctionData();
 		init();
 	}
-	
+
 	public static void init() throws IOException, ParseException {
 		System.out.println("init");
 		
@@ -165,17 +164,15 @@ public class Master {
 		
 		//enchantProfit(s);
 		
-      //  for(DynamicList list : GUI.lists) {
-       // 	list.getTextField().setText("1");
-       // 	list.getTextField().setText("");
-       // }
-        //Time_series.init(s);
+	  //  for(DynamicList list : GUI.lists) {
+	   // 	list.getTextField().setText("1");
+	   // 	list.getTextField().setText("");
+	   // }
+		//Time_series.init(s);
 		
 		System.out.println("Total Auction profit: "+String.format("%.2f", Data_processing.sum(s.loc("Auction").items,"goldearned")));
 	}
 	
-	
-
 	private static void getUsefulDirectories() throws FileNotFoundException {
 		Scanner scan = new Scanner(new File("which-files.txt"));
 		for(int i=0;scan.hasNext();i++) {
@@ -387,31 +384,38 @@ public class Master {
 		
 	}
 
+	public static void getAuctionData() throws JSONException, IOException {
+		PrintWriter out = new PrintWriter(new File("ah-data.txt"));
+		if(Master.api_token == null || Master.api_token.isEmpty() || Master.api_token.length()==0) {
+			Master.api_token = api.get_token(Master.apikey);
+		}
+		if(true) {
+			out.println(getAHdata("3678").replaceAll("\\s{2,}", " "));
+			out.close();
+			System.out.println("Done");
+			System.exit(0);
+		}
+		
+		System.out.println("----------------------------------------------------------------------------------------------------------------------------");
+		out.close();
+		System.exit(0);
+	}
+
 	//not for public use. But useful if you want to download all of the current JSON files from the wow api
-	public static String getAHdata(String realm) throws JSONException, IOException{
-		org.json.JSONObject json = api.readJsonFromUrl("https://us.api.blizzard.com/data/wow/connected-realm/"+"1236"+"/auctions?namespace=dynamic-us&locale=en_US&access_token="+Master.api_token);
-		File jsonFile= new File("json/"+realm+"-"+((JSONObject) json.getJSONArray("files").get(0)).get("lastModified").toString()+".json");
-		System.out.print(String.format("%-20s", realm)+" "+(new Date().getTime()-new Date(Long.parseLong(((JSONObject)json.getJSONArray("files").get(0)).get("lastModified").toString())).getTime())/1000/60);
-		String url = ((JSONObject) json.getJSONArray("files").get(0)).get("url").toString();
-		//System.out.print(" "+((JSONObject) json.getJSONArray("files").get(0)).get("lastModified").toString());
-		if(!jsonFile.exists()) {
-			//System.out.print(" Downloading");
-			
-			//api.readJsonStream(url);
-			//donwloadFile(url,jsonFile);
-			//org.json.JSONObject json2 = api.readJsonFromUrl("http://auction-api-us.worldofwarcraft.com/auction-data/49e985b0adca27a885b4f84d99355da6/auctions.json");
-			
-			//PrintWriter jsonFileout = new PrintWriter(jsonFile);
-			//jsonFileout.println(json2);
-		//	jsonFileout.close();
-			
-		}
-		else {
-		//	System.out.print(" Exists");
-		}
-		//System.out.print(" done");
+	public static String getAHdata(String realm_id) throws JSONException, IOException{
+		org.json.JSONObject json = api.readJsonFromUrl("https://us.api.blizzard.com/data/wow/connected-realm/"+realm_id+"/auctions?namespace=dynamic-us&locale=en_US&access_token="+Master.api_token);
+		System.out.print(json.toString());
+		//System.out.print(" Downloading");
+		
+		//api.readJsonStream(url);
+		//donwloadFile(url,jsonFile);
+		//org.json.JSONObject json2 = api.readJsonFromUrl("http://auction-api-us.worldofwarcraft.com/auction-data/49e985b0adca27a885b4f84d99355da6/auctions.json");
+		
+		//PrintWriter jsonFileout = new PrintWriter(jsonFile);
+		//jsonFileout.println(json2);
+	//	jsonFileout.close();
 		System.out.println();
-		return url;
+		return "";
 	}
 	
 	//not for public use
@@ -420,11 +424,11 @@ public class Master {
 		 //  dstFile.mkdirs();
 		}
 		try {
-		    URL url = new URL(urlStr);
-		    FileUtils.copyURLToFile(url, dstFile);
+			URL url = new URL(urlStr);
+			FileUtils.copyURLToFile(url, dstFile);
 		} catch (Exception e) {
-		    System.err.println(e);
-		    //VeBLogger.getInstance().log( e.getMessage());
+			System.err.println(e);
+			//VeBLogger.getInstance().log( e.getMessage());
 		}
 		
 	}
@@ -435,27 +439,27 @@ public class Master {
 	
 	
 	
-	  private static String readAll(Reader rd) throws IOException {
-		    StringBuilder sb = new StringBuilder();
-		    int cp;
-		    while ((cp = rd.read()) != -1) {
-		      sb.append((char) cp);
-		    }
-		    return sb.toString();
-		  }
+	private static String readAll(Reader rd) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
 
-		  public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-			  url="https://graph.facebook.com/19292868552";
-		    InputStream is = new URL(url).openStream();
-		    try {
-		      BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-		      String jsonText = readAll(rd);
-		      JSONObject json = new JSONObject(jsonText);
-		      return json;
-		    } finally {
-		      is.close();
-		    }
-		  }
+	public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+		url="https://graph.facebook.com/19292868552";
+		InputStream is = new URL(url).openStream();
+		try {
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+			String jsonText = readAll(rd);
+			JSONObject json = new JSONObject(jsonText);
+			return json;
+		} finally {
+			is.close();
+		}
+	}
 	
 	
 	////////////////////////////////////////////////////////
@@ -787,18 +791,18 @@ public class Master {
 		//System.out.println("getPerDayData");
 		if(s.items.size() > 0) {
 			for(Item item : s.items) {
-			Subset itemSub = new Subset(s).id(item.idname.id);
-			if(itemSub.items.size() > 0) {
-				if(item.idname.name.equals("") || Double.toString(Data_processing.avg(itemSub.items,"goldearned")).equals("NaN") ||  item.idname.id == 0) {
+				Subset itemSub = new Subset(s).id(item.idname.id);
+				if(itemSub.items.size() > 0) {
+					if(item.idname.name.equals("") || Double.toString(Data_processing.avg(itemSub.items,"goldearned")).equals("NaN") ||  item.idname.id == 0) {
 
-				}
-				else {
-					eventsPerDay.add(
-						String.format("%-50s", item.idname.name)+
+					}
+					else {
+						eventsPerDay.add(
+							String.format("%-50s", item.idname.name)+
 							String.format("%12s", (int)Data_processing.sum(itemSub.items,"quantity"))/*+","*/+
 							String.format("%20s", String.format("%.2f", Data_processing.sum(itemSub.items,"goldearned")))+
 							String.format("%12s", String.format("%.2f", Data_processing.sum(itemSub.items,"goldearned")/(int)Data_processing.sum(itemSub.items,"quantity")))
-							);
+						);
 					}
 				}
 			}
@@ -849,15 +853,15 @@ public class Master {
 			while((line = bf.readLine())  != null) {
 				if(eventHash.contains(line)) {
 					//System.out.println(eventHash.size()+" \t\t\t\t\t"+allEvents.size());
-    				//System.out.println(line);
-    			}
+					//System.out.println(line);
+				}
 				//System.out.println(fileName);
 				//System.out.println(line);
 				if(!line.contains("Customer Support")&&
-	    				!eventHash.contains(line)&&
-	    				Long.parseLong(line.substring(line.lastIndexOf(",")-10,line.lastIndexOf(",")))*1000l>min_date
-	    				&&!line.contains(",i:0,")
-	    					) {
+						!eventHash.contains(line)&&
+						Long.parseLong(line.substring(line.lastIndexOf(",")-10,line.lastIndexOf(",")))*1000l>min_date
+						&&!line.contains(",i:0,")
+							) {
 					eventHash.add(line);
 					eventDataHandler(line);
 					
@@ -905,42 +909,42 @@ public class Master {
 				boolean inGuildObject = false;
 				String location = "";
 				location = location + "";
-			    while ((data = reader.readLine()) != null) {
-			    	data = data.replace("\\n","\n");
+				while ((data = reader.readLine()) != null) {
+					data = data.replace("\\n","\n");
 					List<String> allData = Arrays.asList(data.split("\n"));
 					if(Data_processing.whatTypeEvent(data)!=null) {
-			    		int num = 0;
-			    		for(String eventdata : allData) {
-			    			eventdata = Data_processing.parseFixes(eventdata);
-			    			if(fileEventHash.contains(eventdata)) {
-			    				//System.out.println(eventdata);
-			    			}
-			    			String str =new File(new File(new File(account).getParent()).getParent()).getName()+","+data.substring(data.indexOf("@")+1,data.indexOf("@",data.indexOf("@")+1))+","+Data_processing.whatTypeEvent(data)+","+eventdata;
-			    			
-			    			if(new File(new File(account).getParent()).getName().contains("#")) {
-			    				String filename = new File(new File(account).getParent()).getName();
-			    				filename = filename.substring(0,filename.indexOf("#")+2);
-			    				str =filename+","+data.substring(data.indexOf("@")+1,data.indexOf("@",data.indexOf("@")+1))+","+Data_processing.whatTypeEvent(data)+","+eventdata;
+						int num = 0;
+						for(String eventdata : allData) {
+							eventdata = Data_processing.parseFixes(eventdata);
+							if(fileEventHash.contains(eventdata)) {
+								//System.out.println(eventdata);
+							}
+							String str =new File(new File(new File(account).getParent()).getParent()).getName()+","+data.substring(data.indexOf("@")+1,data.indexOf("@",data.indexOf("@")+1))+","+Data_processing.whatTypeEvent(data)+","+eventdata;
+							
+							if(new File(new File(account).getParent()).getName().contains("#")) {
+								String filename = new File(new File(account).getParent()).getName();
+								filename = filename.substring(0,filename.indexOf("#")+2);
+								str =filename+","+data.substring(data.indexOf("@")+1,data.indexOf("@",data.indexOf("@")+1))+","+Data_processing.whatTypeEvent(data)+","+eventdata;
 
-			    			}
-			    			//System.out.println(str);
-			    			if(((Read_In_New_Vendor_Events && str.endsWith("Vendor")) || !str.endsWith("Vendor"))&&
-			    				!str.contains("Customer Support")&&
-			    				!eventHash.contains(str)&&num!=0&&
-			    				Long.parseLong(str.substring(str.lastIndexOf(",")-10,str.lastIndexOf(",")))*1000l>time
-			    				&&!str.contains(",i:0,")
-			    					) {
-			    				
-			    				
-				    				eventHash.add(str);
-				    				//System.out.println(str);
-				    				eventDataHandler(str);
-			    				
-			    			}
-			    			num++;
-			    			
-			    		}
-			    	}
+							}
+							//System.out.println(str);
+							if(((Read_In_New_Vendor_Events && str.endsWith("Vendor")) || !str.endsWith("Vendor"))&&
+								!str.contains("Customer Support")&&
+								!eventHash.contains(str)&&num!=0&&
+								Long.parseLong(str.substring(str.lastIndexOf(",")-10,str.lastIndexOf(",")))*1000l>time
+								&&!str.contains(",i:0,")
+									) {
+								
+								
+									eventHash.add(str);
+									//System.out.println(str);
+									eventDataHandler(str);
+								
+							}
+							num++;
+							
+						}
+					}
 					else {
 						
 						//PERSONAL BAG AND BANK
@@ -997,8 +1001,8 @@ public class Master {
 						
 	
 					}
-			    }
-			    reader.close();
+				}
+				reader.close();
 			}
 			System.out.println(numEvents);//+"\t"+Master.allEvents.size());
 			if(numEvents != Master.allEvents.size()&& account.toLowerCase().contains("tower")&&!usefulFiles.contains(account)) {

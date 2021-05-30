@@ -13,82 +13,82 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 public class GUI extends JPanel implements ActionListener {
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5970893809825175093L;
 	static JFrame frame = new JFrame("Filters");
-    GridLayout grid = new GridLayout(1,7);
-    Button clearBtn = new Button("Clear");
-    Button updateBtn = new Button("Update");
-    static ArrayList<DynamicList> lists = new ArrayList<DynamicList>();
-    static JDatePickerImpl startDatePicker;
-    static JDatePickerImpl endDatePicker;
-    public static Subset s = new Subset(new ArrayList<Item>());
-    
-    public GUI() {
-        super ();
-        //System.out.println("*"+Graph.account.getArray()+"\n\n");
-        //lists.add(createDynamicList(Graph.graphOptions));
-        lists.add(createDynamicList(Graph.account));
-        lists.add(createDynamicList(Graph.character));
-        lists.add(createDynamicList(Graph.realm));
-        lists.add(createDynamicList(Graph.type));
-        lists.add(createDynamicList(Graph.name));
-        //lists.add(createDynamicList(Graph.otherPlayer));
-        //lists.add(createDynamicList(Graph.id));
-        lists.add(createDynamicList(Graph.loc));
-        
-        JPanel date_panel = new JPanel(new BorderLayout());
-        JPanel start_date = getNewDatePanel("Start Date: ");
-        JPanel end_date = getNewDatePanel("End Date: ");
-        
-        date_panel.add(start_date,BorderLayout.NORTH);
-        date_panel.add(end_date,BorderLayout.SOUTH);
-       // frame.add(date_panel);
-        JPanel panel = new JPanel(new BorderLayout());
-        
-        add(updateBtn);
-        updateBtn.addActionListener(this);
-        panel.add(updateBtn,BorderLayout.NORTH);
-        
-        
-        //add(clearBtn);
-        clearBtn.addActionListener(this);
-       // panel.add(clearBtn,BorderLayout.SOUTH);
-        frame.add(panel);
-        //vbox.setSpacing(8);
-        frame.setLayout(new FlowLayout());
-        
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        //frame.setLocationRelativeTo(null);
-        //frame.setSize(new java.awt.Dimension( 1000 , 1000 ));
-        frame.setVisible(true);
-        
+	GridLayout grid = new GridLayout(1,7);
+	Button clearBtn = new Button("Clear");
+	Button updateBtn = new Button("Update");
+	static ArrayList<DynamicList> lists = new ArrayList<DynamicList>();
+	static JDatePickerImpl startDatePicker;
+	static JDatePickerImpl endDatePicker;
+	public static Subset s = new Subset(new ArrayList<Item>());
+	
+	public GUI() {
+		super ();
+		//System.out.println("*"+Graph.account.getArray()+"\n\n");
+		//lists.add(createDynamicList(Graph.graphOptions));
+		lists.add(createDynamicList(Graph.account));
+		lists.add(createDynamicList(Graph.character));
+		lists.add(createDynamicList(Graph.realm));
+		lists.add(createDynamicList(Graph.type));
+		lists.add(createDynamicList(Graph.name));
+		//lists.add(createDynamicList(Graph.otherPlayer));
+		//lists.add(createDynamicList(Graph.id));
+		lists.add(createDynamicList(Graph.loc));
+		
+		JPanel date_panel = new JPanel(new BorderLayout());
+		JPanel start_date = getNewDatePanel("Start Date: ");
+		JPanel end_date = getNewDatePanel("End Date: ");
+		
+		date_panel.add(start_date,BorderLayout.NORTH);
+		date_panel.add(end_date,BorderLayout.SOUTH);
+	   // frame.add(date_panel);
+		JPanel panel = new JPanel(new BorderLayout());
+		
+		add(updateBtn);
+		updateBtn.addActionListener(this);
+		panel.add(updateBtn,BorderLayout.NORTH);
+		
+		
+		//add(clearBtn);
+		clearBtn.addActionListener(this);
+	   // panel.add(clearBtn,BorderLayout.SOUTH);
+		frame.add(panel);
+		//vbox.setSpacing(8);
+		frame.setLayout(new FlowLayout());
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		//frame.setLocationRelativeTo(null);
+		//frame.setSize(new java.awt.Dimension( 1000 , 1000 ));
+		frame.setVisible(true);
+		
 
 
-    }
-    
-    public static JPanel getNewDatePanel(String str){
-    	Date date = new Date();
-        UtilDateModel model = new UtilDateModel();
-        model.setDate(Integer.parseInt(Master.yyyy.format(date)),Integer.parseInt(Master.M.format(date)),Integer.parseInt(Master.d.format(date)));
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        
-        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
-        if(str.equals("Start Date: ")) {
-        	startDatePicker = datePicker;
-        }
-        if(str.equals("End Date: ")) {
-        	endDatePicker = datePicker;
-        }
-        
-        datePicker.addActionListener(new ActionListener() {
+	}
+	
+	public static JPanel getNewDatePanel(String str){
+		Date date = new Date();
+		UtilDateModel model = new UtilDateModel();
+		model.setDate(Integer.parseInt(Master.yyyy.format(date)),Integer.parseInt(Master.M.format(date)),Integer.parseInt(Master.d.format(date)));
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		
+		JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
+		if(str.equals("Start Date: ")) {
+			startDatePicker = datePicker;
+		}
+		if(str.equals("End Date: ")) {
+			endDatePicker = datePicker;
+		}
+		
+		datePicker.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -100,17 +100,17 @@ public class GUI extends JPanel implements ActionListener {
 				//}
 				
 			}
-        	
-        });
-        JPanel start_date_panel = new JPanel(new BorderLayout());
-        start_date_panel.add(new JLabel(str),BorderLayout.NORTH);
-        start_date_panel.add(datePicker,BorderLayout.SOUTH);
-        return start_date_panel;
-    }
-    
+			
+		});
+		JPanel start_date_panel = new JPanel(new BorderLayout());
+		start_date_panel.add(new JLabel(str),BorderLayout.NORTH);
+		start_date_panel.add(datePicker,BorderLayout.SOUTH);
+		return start_date_panel;
+	}
+	
 
-    public DynamicList createDynamicList(Filter_value value) {
-    	//value.setArray(Data_processing.getPossibleValues(s, value));
+	public DynamicList createDynamicList(Filter_value value) {
+		//value.setArray(Data_processing.getPossibleValues(s, value));
 		DynamicList dropdown = new DynamicList(value);
 		JPanel outer = new JPanel(new BorderLayout());
 		outer.add(new JLabel(value.getFilter()),BorderLayout.NORTH);
@@ -134,15 +134,15 @@ public class GUI extends JPanel implements ActionListener {
 		//add(dropdown.getList(),vbox);
 		outer.add(panel,BorderLayout.SOUTH);
 		frame.add(outer);
-    	return dropdown;
+		return dropdown;
 	}
 
 
 	@SuppressWarnings("unused")
 	static void createAndShowGUI(Subset subset) {
 		s =subset;
-        JComponent newContentPane = new GUI();
-    }
+		JComponent newContentPane = new GUI();
+	}
 	
 	public static void filterModelBasedOnOthers() throws ParseException, IOException {
 		//System.out.println("filterModelBasedOnOthers");

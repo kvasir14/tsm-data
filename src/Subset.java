@@ -199,6 +199,4 @@ public class Subset {
 			//System.out.println(len+" "+b.size()+" "+new_items.size());
 			return this;
 		}
-		
-		
 }

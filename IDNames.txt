@@ -6869,6 +6869,7 @@
 133248, Ring of Frozen Rain
 133266, Veneficial Band
 133270, Crafty's Gaiters
+133272, Geordan's Cloak
 133283, Modgud's Blade
 133303, Staff of Siphoned Essences
 133310, The Brood Queen's Veil

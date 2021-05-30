@@ -19,6 +19,5 @@ public class Sale extends Event{
 		loc = data.get(10);
 		callback();
 		Master.allEvents.add(this);
-		
 	}
 }

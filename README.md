@@ -36,3 +36,8 @@ Partial To Do List:
 - change account to be based on parent folder
     - or allow it to be set after file choose gui?
 - Maybe add some, you know, comments
+
+
+
+- probably been long enough that IDNames needs to be regenerated, since some of the stuff was pulled 2 expansions ago.
+	- not that I think blizzard reuses old IDs. Or I'd hope.
